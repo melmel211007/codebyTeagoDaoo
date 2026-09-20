@@ -7,204 +7,485 @@
     <title>Vòng Quay Phát Biểu</title>
 
     <style>
-        /* =========================================
-   RESET
-========================================= */
+        /* ================================
+   VÒNG QUAY RANDOM - BLUE CREAM
+   ================================ */
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+    box-sizing: border-box;
+}
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
 
-        /* =========================================
-   BODY - STYLE GIỐNG QUIZ GAME
-========================================= */
+body {
+    min-height: 100vh;
+    font-family: "Arial Rounded MT Bold", "Trebuchet MS", Arial, sans-serif;
+    color: #0758b3;
 
-        body {
-            min-height: 100vh;
+    background:
+        radial-gradient(circle at 7% 8%,
+            rgba(112, 145, 180, 0.9) 0 85px,
+            transparent 86px),
 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        radial-gradient(circle at 93% 90%,
+            rgba(112, 145, 180, 0.9) 0 100px,
+            transparent 101px),
 
-            padding: 20px;
+        radial-gradient(circle at 90% 12%,
+            rgba(112, 145, 180, 0.55) 0 35px,
+            transparent 36px),
 
-            font-family:
-                "Arial Rounded MT Bold",
-                "Nunito",
-                Arial,
-                sans-serif;
+        #fbf5eb;
 
-            color: #4d4352;
+    overflow-x: hidden;
 
-            background:
-                radial-gradient(circle at 10% 15%,
-                    #ffd6e8 0 90px,
-                    transparent 91px),
-                radial-gradient(circle at 90% 15%,
-                    #dcd4ff 0 110px,
-                    transparent 111px),
-                radial-gradient(circle at 85% 90%,
-                    #ffe5c7 0 120px,
-                    transparent 121px),
-                linear-gradient(135deg,
-                    #fff1f7,
-                    #eeeaff);
-
-            overflow-x: hidden;
-        }
+    position: relative;
+}
 
 
-        /* =========================================
+/* ================================
+   DECORATION NỀN
+   ================================ */
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 180px;
+    height: 180px;
+
+    top: -65px;
+    left: -45px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.35) 2px,
+            transparent 3px
+        );
+
+    background-size: 18px 18px;
+
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+
+body::after {
+    content: "";
+    position: fixed;
+
+    width: 210px;
+    height: 210px;
+
+    right: -80px;
+    bottom: -75px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.3) 2px,
+            transparent 3px
+        );
+
+    background-size: 18px 18px;
+
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+
+/* ================================
+   KHUNG CHÍNH
+   ================================ */
+
+.wheel-section {
+    width: min(1200px, 94%);
+    margin: 0 auto;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 35px 20px 50px;
+}
+
+
+/* ================================
    TIÊU ĐỀ
-========================================= */
+   ================================ */
 
-        h1 {
-            margin-bottom: 22px;
+h1 {
+    margin: 5px 0 25px;
 
-            color: #ff6fa5;
+    color: #0758b3;
 
-            font-size: 38px;
-            font-weight: bold;
+    font-size: clamp(32px, 5vw, 58px);
 
-            text-align: center;
+    font-weight: 800;
 
-            text-shadow:
-                3px 3px 0 #ffd1e1;
-        }
+    letter-spacing: 2px;
 
+    text-align: center;
 
-        /* =========================================
-   KHU VỰC VÒNG QUAY
-========================================= */
+    text-transform: uppercase;
 
-        .wheel-container {
-            position: relative;
-
-            width: 560px;
-            height: 560px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            margin-bottom: 22px;
-
-            background: rgba(255, 255, 255, 0.35);
-
-            border-radius: 50%;
-
-            box-shadow:
-                0 15px 35px rgba(116, 82, 120, 0.12);
-        }
+    text-shadow:
+        2px 2px 0 #ffffff,
+        0 5px 12px rgba(62, 105, 145, 0.15);
+}
 
 
-        /* =========================================
+/* ================================
    VÒNG QUAY
-========================================= */
+   ================================ */
 
-        #wheel {
-            display: block;
+.wheel-container {
+    position: relative;
 
-            width: 530px;
-            height: 530px;
+    width: min(680px, 88vw);
+    aspect-ratio: 1 / 1;
 
-            border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            background: #fff8fb;
+    margin: 10px auto 30px;
 
-            border: 8px solid white;
-
-            box-shadow:
-                0 0 0 5px #eadfee,
-                0 8px 0 #ded3e1,
-                0 15px 30px rgba(116, 82, 120, 0.18);
-        }
+    filter:
+        drop-shadow(0 18px 20px rgba(66, 94, 125, 0.18));
+}
 
 
-        /* =========================================
-   KIM CHỈ
-========================================= */
+/* Canvas */
 
-        .pointer {
-            position: absolute;
+#wheel {
+    display: block;
 
-            top: -5px;
-            left: 50%;
+    width: 100%;
+    height: 100%;
 
-            transform: translateX(-50%);
+    border-radius: 50%;
 
-            width: 0;
-            height: 0;
+    border: 10px solid #6f91b3;
 
-            border-left: 22px solid transparent;
-            border-right: 22px solid transparent;
-            border-top: 52px solid #ff6fa5;
+    background: #ffffff;
 
-            z-index: 10;
+    box-shadow:
+        0 0 0 5px #d7e4ef,
+        0 0 0 9px #ffffff,
+        inset 0 0 20px rgba(50, 80, 110, 0.15);
 
-            filter:
-                drop-shadow(0 4px 0 #d85d89) drop-shadow(0 5px 8px rgba(120, 70, 100, 0.2));
-        }
+    cursor: default;
+}
 
 
-        /* =========================================
+/* ================================
+   MŨI TÊN
+   ================================ */
+
+.wheel-container .pointer {
+    position: absolute;
+
+    z-index: 10;
+
+    top: -3px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+
+    border-top: 45px solid #0758b3;
+
+    filter:
+        drop-shadow(0 4px 3px rgba(40, 70, 100, 0.25));
+}
+
+
+/* Viền trắng bên trong mũi tên */
+
+.wheel-container .pointer::before {
+    content: "";
+
+    position: absolute;
+
+    left: -14px;
+    top: -43px;
+
+    width: 0;
+    height: 0;
+
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+
+    border-top: 28px solid #ffffff;
+}
+
+
+/* ================================
    NÚT QUAY
-========================================= */
+   ================================ */
 
-        #spinBtn {
-            border: none;
+#spinBtn {
+    appearance: none;
+    border: none;
+    outline: none;
 
-            padding: 16px 45px;
+    display: block;
 
-            border-radius: 18px;
+    margin: 0 auto;
 
-            background:
-                linear-gradient(135deg,
-                    #ff80ad,
-                    #c58cff);
+    padding: 17px 55px;
 
-            color: white;
+    min-width: 230px;
 
-            font-family: inherit;
+    border-radius: 50px;
 
-            font-size: 20px;
-            font-weight: bold;
+    background: #6f91b3;
 
-            cursor: pointer;
+    color: #ffffff;
 
-            box-shadow:
-                0 6px 0 #c76694,
-                0 10px 20px rgba(200, 110, 160, 0.2);
+    font-family: inherit;
 
-            transition: 0.15s ease;
-        }
+    font-size: 22px;
+    font-weight: 800;
 
-        #spinBtn:hover {
-            transform: translateY(-3px);
+    letter-spacing: 1px;
 
-            box-shadow:
-                0 9px 0 #c76694,
-                0 15px 25px rgba(200, 110, 160, 0.25);
-        }
+    cursor: pointer;
 
-        #spinBtn:active {
-            transform: translateY(3px);
+    box-shadow:
+        0 6px 0 #527493,
+        0 12px 20px rgba(70, 100, 130, 0.22);
 
-            box-shadow:
-                0 3px 0 #c76694;
-        }
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.2s ease;
+}
 
-        #spinBtn:disabled {
-            opacity: 0.55;
 
-            cursor: not-allowed;
+/* Hover */
 
-            transform: none;
-        }
+#spinBtn:hover {
+    background: #5e83a7;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 0 #527493,
+        0 15px 22px rgba(70, 100, 130, 0.25);
+}
+
+
+/* Khi nhấn */
+
+#spinBtn:active {
+    transform: translateY(5px);
+
+    box-shadow:
+        0 2px 0 #527493,
+        0 5px 10px rgba(70, 100, 130, 0.18);
+}
+
+
+/* Khi đang quay */
+
+#spinBtn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+        0 4px 0 #527493,
+        0 8px 15px rgba(70, 100, 130, 0.15);
+}
+
+
+/* ================================
+   KẾT QUẢ
+   ================================ */
+
+#result {
+    width: min(500px, 85vw);
+
+    min-height: 58px;
+
+    margin: 22px auto 0;
+
+    padding: 14px 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    border-radius: 30px;
+
+    border: 2px solid #9db9d3;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    color: #5d84a8;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 15px rgba(80, 110, 140, 0.1);
+}
+
+
+/* Tên người trúng */
+
+#result strong {
+    color: #0758b3;
+
+    margin-left: 5px;
+}
+
+
+/* ================================
+   TRANG TRÍ VÒNG QUAY
+   ================================ */
+
+.wheel-section::before {
+    content: "✦";
+
+    position: fixed;
+
+    top: 80px;
+    left: 7%;
+
+    color: #6f91b3;
+
+    font-size: 35px;
+
+    opacity: 0.8;
+
+    pointer-events: none;
+}
+
+.wheel-section::after {
+    content: "✦";
+
+    position: fixed;
+
+    top: 90px;
+    right: 8%;
+
+    color: #6f91b3;
+
+    font-size: 28px;
+
+    opacity: 0.7;
+
+    pointer-events: none;
+}
+
+
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 700px) {
+
+    .wheel-section {
+        width: 100%;
+        padding: 25px 12px 35px;
+    }
+
+    h1 {
+        font-size: 32px;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 15px;
+    }
+
+    .wheel-container {
+        width: min(94vw, 560px);
+
+        margin-bottom: 25px;
+    }
+
+    #wheel {
+        border-width: 7px;
+
+        box-shadow:
+            0 0 0 3px #d7e4ef,
+            0 0 0 6px #ffffff;
+    }
+
+    .wheel-container .pointer {
+        border-left-width: 16px;
+        border-right-width: 16px;
+        border-top-width: 34px;
+    }
+
+    #spinBtn {
+        min-width: 190px;
+
+        padding: 14px 40px;
+
+        font-size: 19px;
+    }
+
+    #result {
+        width: 90%;
+
+        font-size: 17px;
+    }
+}
+
+
+/* ================================
+   MÀN HÌNH RẤT NHỎ
+   ================================ */
+
+@media (max-width: 420px) {
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .wheel-container {
+        width: 94vw;
+    }
+
+    #spinBtn {
+        min-width: 170px;
+
+        padding: 13px 30px;
+
+        font-size: 18px;
+    }
+
+    #result {
+        font-size: 15px;
+
+        min-height: 50px;
+    }
+}
     </style>
 </head>
 
