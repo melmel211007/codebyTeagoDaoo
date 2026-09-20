@@ -7,9 +7,10 @@
     <title>Vòng Quay Phát Biểu</title>
 
     <style>
-        /* ================================
-   VÒNG QUAY RANDOM - BLUE CREAM
-   ================================ */
+        /* ========================================
+   RANDOM WHEEL
+   STYLE: CREAM × DUSTY BLUE × ROYAL BLUE
+======================================== */
 
 * {
     box-sizing: border-box;
@@ -19,119 +20,116 @@ html,
 body {
     margin: 0;
     padding: 0;
-    width: 100%;
     min-height: 100%;
 }
 
 body {
     min-height: 100vh;
-    font-family: "Arial Rounded MT Bold", "Trebuchet MS", Arial, sans-serif;
-    color: #0758b3;
 
-    background:
-        radial-gradient(circle at 7% 8%,
-            rgba(112, 145, 180, 0.9) 0 85px,
-            transparent 86px),
+    font-family:
+        "Arial Rounded MT Bold",
+        "Trebuchet MS",
+        Arial,
+        sans-serif;
 
-        radial-gradient(circle at 93% 90%,
-            rgba(112, 145, 180, 0.9) 0 100px,
-            transparent 101px),
-
-        radial-gradient(circle at 90% 12%,
-            rgba(112, 145, 180, 0.55) 0 35px,
-            transparent 36px),
-
-        #fbf5eb;
-
-    overflow-x: hidden;
-
-    position: relative;
-}
-
-
-/* ================================
-   DECORATION NỀN
-   ================================ */
-
-body::before {
-    content: "";
-    position: fixed;
-    width: 180px;
-    height: 180px;
-
-    top: -65px;
-    left: -45px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.35) 2px,
-            transparent 3px
-        );
-
-    background-size: 18px 18px;
-
-    opacity: 0.8;
-    pointer-events: none;
-}
-
-
-body::after {
-    content: "";
-    position: fixed;
-
-    width: 210px;
-    height: 210px;
-
-    right: -80px;
-    bottom: -75px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.3) 2px,
-            transparent 3px
-        );
-
-    background-size: 18px 18px;
-
-    opacity: 0.8;
-    pointer-events: none;
-}
-
-
-/* ================================
-   KHUNG CHÍNH
-   ================================ */
-
-.wheel-section {
-    width: min(1200px, 94%);
-    margin: 0 auto;
-
-    min-height: 100vh;
+    color: #0757a8;
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    padding: 35px 20px 50px;
+    padding: 38px 20px 45px;
+
+    overflow-x: hidden;
+
+    /* nền chính */
+    background:
+        radial-gradient(
+            circle at 7% 8%,
+            rgba(111, 145, 178, 0.85) 0 85px,
+            transparent 86px
+        ),
+        radial-gradient(
+            circle at 94% 91%,
+            rgba(111, 145, 178, 0.82) 0 105px,
+            transparent 106px
+        ),
+        #fbf5eb;
 }
 
 
-/* ================================
-   TIÊU ĐỀ
-   ================================ */
+/* ========================================
+   DECORATION NHẸ Ở 4 GÓC
+======================================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    width: 190px;
+    height: 190px;
+
+    top: -75px;
+    left: -55px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.5) 0 3px,
+            transparent 3.5px
+        );
+
+    background-size: 19px 19px;
+
+    opacity: .7;
+
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 200px;
+    height: 200px;
+
+    right: -65px;
+    bottom: -65px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.45) 0 3px,
+            transparent 3.5px
+        );
+
+    background-size: 19px 19px;
+
+    opacity: .7;
+
+    pointer-events: none;
+}
+
+
+/* ========================================
+   TITLE
+======================================== */
 
 h1 {
-    margin: 5px 0 25px;
+    position: relative;
+    z-index: 2;
 
-    color: #0758b3;
+    margin: 0 0 30px;
 
-    font-size: clamp(32px, 5vw, 58px);
+    color: #0757a8;
+
+    font-size: clamp(34px, 5vw, 58px);
 
     font-weight: 800;
 
@@ -141,18 +139,40 @@ h1 {
 
     text-transform: uppercase;
 
-    text-shadow:
-        2px 2px 0 #ffffff,
-        0 5px 12px rgba(62, 105, 145, 0.15);
+    line-height: 1.05;
 }
 
 
-/* ================================
-   VÒNG QUAY
-   ================================ */
+/* đường trang trí dưới title */
+
+h1::after {
+    content: "";
+
+    display: block;
+
+    width: 95px;
+    height: 4px;
+
+    margin: 14px auto 0;
+
+    border-radius: 20px;
+
+    background: #86a8c7;
+
+    box-shadow:
+        25px 0 0 #c4d4e3,
+        -25px 0 0 #c4d4e3;
+}
+
+
+/* ========================================
+   WHEEL CONTAINER
+======================================== */
 
 .wheel-container {
     position: relative;
+
+    z-index: 2;
 
     width: min(680px, 88vw);
     aspect-ratio: 1 / 1;
@@ -161,14 +181,18 @@ h1 {
     align-items: center;
     justify-content: center;
 
-    margin: 10px auto 30px;
+    margin: 0 auto 30px;
 
     filter:
-        drop-shadow(0 18px 20px rgba(66, 94, 125, 0.18));
+        drop-shadow(
+            0 18px 25px rgba(64, 94, 125, .16)
+        );
 }
 
 
-/* Canvas */
+/* ========================================
+   CANVAS
+======================================== */
 
 #wheel {
     display: block;
@@ -178,29 +202,28 @@ h1 {
 
     border-radius: 50%;
 
+    /* vòng ngoài */
     border: 10px solid #6f91b3;
 
-    background: #ffffff;
+    background: #fffdf8;
 
     box-shadow:
-        0 0 0 5px #d7e4ef,
-        0 0 0 9px #ffffff,
-        inset 0 0 20px rgba(50, 80, 110, 0.15);
-
-    cursor: default;
+        0 0 0 4px #dce7f0,
+        0 0 0 8px #ffffff,
+        inset 0 0 25px rgba(67, 98, 128, .12);
 }
 
 
-/* ================================
-   MŨI TÊN
-   ================================ */
+/* ========================================
+   POINTER
+======================================== */
 
 .wheel-container .pointer {
     position: absolute;
 
-    z-index: 10;
+    z-index: 20;
 
-    top: -3px;
+    top: -8px;
     left: 50%;
 
     transform: translateX(-50%);
@@ -208,62 +231,43 @@ h1 {
     width: 0;
     height: 0;
 
-    border-left: 22px solid transparent;
-    border-right: 22px solid transparent;
+    border-left: 21px solid transparent;
+    border-right: 21px solid transparent;
 
-    border-top: 45px solid #0758b3;
+    border-top: 43px solid #0757a8;
 
     filter:
-        drop-shadow(0 4px 3px rgba(40, 70, 100, 0.25));
+        drop-shadow(
+            0 4px 3px rgba(38, 66, 94, .25)
+        );
 }
 
 
-/* Viền trắng bên trong mũi tên */
-
-.wheel-container .pointer::before {
-    content: "";
-
-    position: absolute;
-
-    left: -14px;
-    top: -43px;
-
-    width: 0;
-    height: 0;
-
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-
-    border-top: 28px solid #ffffff;
-}
-
-
-/* ================================
+/* ========================================
    NÚT QUAY
-   ================================ */
+======================================== */
 
 #spinBtn {
-    appearance: none;
+    position: relative;
+    z-index: 3;
+
     border: none;
     outline: none;
 
-    display: block;
+    min-width: 235px;
 
-    margin: 0 auto;
-
-    padding: 17px 55px;
-
-    min-width: 230px;
+    padding: 16px 48px;
 
     border-radius: 50px;
 
-    background: #6f91b3;
+    background: #7195b8;
 
-    color: #ffffff;
+    color: white;
 
     font-family: inherit;
 
-    font-size: 22px;
+    font-size: 21px;
+
     font-weight: 800;
 
     letter-spacing: 1px;
@@ -271,168 +275,129 @@ h1 {
     cursor: pointer;
 
     box-shadow:
-        0 6px 0 #527493,
-        0 12px 20px rgba(70, 100, 130, 0.22);
+        0 5px 0 #527695,
+        0 10px 20px rgba(70, 100, 130, .18);
 
     transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease,
-        background 0.2s ease;
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
 }
-
-
-/* Hover */
 
 #spinBtn:hover {
-    background: #5e83a7;
+    background: #6389ae;
 
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 
     box-shadow:
-        0 8px 0 #527493,
-        0 15px 22px rgba(70, 100, 130, 0.25);
+        0 8px 0 #527695,
+        0 14px 24px rgba(70, 100, 130, .22);
 }
-
-
-/* Khi nhấn */
 
 #spinBtn:active {
-    transform: translateY(5px);
+    transform: translateY(4px);
 
     box-shadow:
-        0 2px 0 #527493,
-        0 5px 10px rgba(70, 100, 130, 0.18);
+        0 2px 0 #527695,
+        0 5px 10px rgba(70, 100, 130, .15);
 }
 
-
-/* Khi đang quay */
-
 #spinBtn:disabled {
-    opacity: 0.65;
+    opacity: .6;
 
     cursor: not-allowed;
 
     transform: none;
-
-    box-shadow:
-        0 4px 0 #527493,
-        0 8px 15px rgba(70, 100, 130, 0.15);
 }
 
 
-/* ================================
+/* ========================================
    KẾT QUẢ
-   ================================ */
+======================================== */
 
 #result {
-    width: min(500px, 85vw);
+    position: relative;
+    z-index: 3;
+
+    width: min(520px, 88vw);
 
     min-height: 58px;
 
-    margin: 22px auto 0;
+    margin-top: 22px;
 
-    padding: 14px 25px;
+    padding: 13px 25px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    text-align: center;
+    border: 2px solid #aec5da;
 
-    border-radius: 30px;
+    border-radius: 40px;
 
-    border: 2px solid #9db9d3;
+    background: rgba(255, 253, 248, .88);
 
-    background: rgba(255, 255, 255, 0.72);
+    color: #7195b8;
 
-    color: #5d84a8;
+    font-size: 19px;
 
-    font-size: 20px;
     font-weight: 700;
 
+    text-align: center;
+
     box-shadow:
-        0 5px 15px rgba(80, 110, 140, 0.1);
+        0 5px 18px rgba(76, 105, 135, .08);
 }
-
-
-/* Tên người trúng */
 
 #result strong {
-    color: #0758b3;
+    color: #0757a8;
 
-    margin-left: 5px;
+    margin-left: 6px;
 }
 
 
-/* ================================
-   TRANG TRÍ VÒNG QUAY
-   ================================ */
+/* ========================================
+   DECORATIVE CIRCLES
+   tạo bằng box-shadow
+======================================== */
 
-.wheel-section::before {
-    content: "✦";
-
-    position: fixed;
-
-    top: 80px;
-    left: 7%;
-
-    color: #6f91b3;
-
-    font-size: 35px;
-
-    opacity: 0.8;
-
-    pointer-events: none;
-}
-
-.wheel-section::after {
-    content: "✦";
-
-    position: fixed;
-
-    top: 90px;
-    right: 8%;
-
-    color: #6f91b3;
-
-    font-size: 28px;
-
-    opacity: 0.7;
-
-    pointer-events: none;
+body {
+    --blue: #7195b8;
+    --light-blue: #b9cee0;
 }
 
 
-/* ================================
-   MOBILE
-   ================================ */
+/* ========================================
+   TABLET
+======================================== */
 
 @media (max-width: 700px) {
 
-    .wheel-section {
-        width: 100%;
+    body {
         padding: 25px 12px 35px;
     }
 
     h1 {
-        font-size: 32px;
+        font-size: 34px;
 
-        letter-spacing: 1px;
+        margin-bottom: 22px;
+    }
 
-        margin-bottom: 15px;
+    h1::after {
+        width: 70px;
     }
 
     .wheel-container {
-        width: min(94vw, 560px);
+        width: 94vw;
 
-        margin-bottom: 25px;
+        margin-bottom: 24px;
     }
 
     #wheel {
         border-width: 7px;
 
         box-shadow:
-            0 0 0 3px #d7e4ef,
+            0 0 0 3px #dce7f0,
             0 0 0 6px #ffffff;
     }
 
@@ -443,37 +408,43 @@ h1 {
     }
 
     #spinBtn {
-        min-width: 190px;
+        min-width: 200px;
 
-        padding: 14px 40px;
+        padding: 14px 38px;
 
         font-size: 19px;
     }
 
     #result {
-        width: 90%;
-
         font-size: 17px;
     }
 }
 
 
-/* ================================
-   MÀN HÌNH RẤT NHỎ
-   ================================ */
+/* ========================================
+   PHONE
+======================================== */
 
-@media (max-width: 420px) {
+@media (max-width: 430px) {
+
+    body {
+        padding-top: 20px;
+    }
 
     h1 {
         font-size: 27px;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 18px;
     }
 
     .wheel-container {
-        width: 94vw;
+        width: 95vw;
     }
 
     #spinBtn {
-        min-width: 170px;
+        min-width: 180px;
 
         padding: 13px 30px;
 
@@ -481,9 +452,11 @@ h1 {
     }
 
     #result {
-        font-size: 15px;
+        min-height: 52px;
 
-        min-height: 50px;
+        padding: 10px 18px;
+
+        font-size: 15px;
     }
 }
     </style>
