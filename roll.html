@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vòng Quay Phát Biểu</title>
+
+    <style>
+        /* =========================================
+   RESET
+========================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* =========================================
+   BODY - STYLE GIỐNG QUIZ GAME
+========================================= */
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            font-family:
+                "Arial Rounded MT Bold",
+                "Nunito",
+                Arial,
+                sans-serif;
+
+            color: #4d4352;
+
+            background:
+                radial-gradient(circle at 10% 15%,
+                    #254c70 0 90px,
+                    transparent 91px),
+                radial-gradient(circle at 90% 15%,
+                    #b2c8df 0 110px,
+                    transparent 111px),
+                radial-gradient(circle at 85% 90%,
+                    #7895b2 0 120px,
+                    transparent 121px),
+                linear-gradient(135deg,
+                    #fdf6ec, #fdf6ec);
+
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 190px;
+            height: 190px;
+
+            top: -75px;
+            left: -55px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    rgba(255, 255, 255, .5) 0 3px,
+                    transparent 3.5px);
+
+            background-size: 19px 19px;
+
+            opacity: .7;
+
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 200px;
+            height: 200px;
+
+            right: -65px;
+            bottom: -65px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    rgba(255, 255, 255, .45) 0 3px,
+                    transparent 3.5px);
+
+            background-size: 19px 19px;
+
+            opacity: .7;
+
+            pointer-events: none;
+        }
+
+        /* =========================================
+   TIÊU ĐỀ
+========================================= */
+
+        h1 {
+            margin-bottom: 22px;
+
+            color: #004aad;
+
+            font-size: 38px;
+            font-weight: bold;
+
+            text-align: center;
+
+            text-shadow:
+                3px 3px 0 #97acc0;
+        }
+
+
+        /* =========================================
+   KHU VỰC VÒNG QUAY
+========================================= */
+
+        .wheel-container {
+            position: relative;
+
+            width: 560px;
+            height: 560px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin-bottom: 22px;
+
+            background: rgba(255, 255, 255, 0.35);
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 15px 35px rgba(116, 82, 120, 0.12);
+        }
+
+
+        /* =========================================
+   VÒNG QUAY
+========================================= */
+
+        #wheel {
+            display: block;
+
+            width: 530px;
+            height: 530px;
+
+            border-radius: 50%;
+
+            background: #fff8fb;
+
+            border: 8px solid white;
+
+            box-shadow:
+                0 0 0 5px #dfe4ee,
+                0 8px 0 #d3d6e1,
+                0 15px 30px rgba(82, 95, 120, 0.18);
+        }
+
+
+        /* =========================================
+   KIM CHỈ
+========================================= */
+
+        .pointer {
+            position: absolute;
+
+            top: -5px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 0;
+            height: 0;
+
+            border-left: 22px solid transparent;
+            border-right: 22px solid transparent;
+            border-top: 52px solid #254c70;
+
+            z-index: 10;
+
+            filter:
+                drop-shadow(0 4px 0 #97acc0) drop-shadow(0 5px 8px rgba(120, 70, 100, 0.2));
+        }
+
+
+        /* =========================================
+   NÚT QUAY
+========================================= */
+
+        #spinBtn {
+            border: none;
+
+            padding: 16px 45px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(135deg,
+                    #004aad,
+                    #97acc0);
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 6px 0 #97acc0,
+                0 10px 20px rgba(0, 74, 173, 0.2);
+
+            transition: 0.15s ease;
+        }
+
+        #spinBtn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 9px 0 #97acc0,
+                0 15px 25px rgba(0, 74, 173, 0.25);
+        }
+
+        #spinBtn:active {
+            transform: translateY(3px);
+
+            box-shadow:
+                0 3px 0 #97acc0;
+        }
+
+        #spinBtn:disabled {
+            opacity: 0.55;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1> Vòng Quay Phát Biểu Bài Tiếng Anh</h1>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="500" height="500"></canvas>
+    </div>
+
+    <button id="spinBtn">QUAY!</button>
+
+    <div id="result"></div>
+
+    <script>
+        const canvas = document.getElementById("wheel");
+        const ctx = canvas.getContext("2d");
+        const spinBtn = document.getElementById("spinBtn");
+        const result = document.getElementById("result");
+
+        const items = [
+            "Nguyễn Ngọc Tâm Anh",
+            "Hà Anna",
+            "Trương Ngọc Ánh",
+            "Phùng Minh Diệp",
+            "Vũ Thùy Dương",
+            "Đặng Cao Hiếu",
+            "Nguyễn Thị Mỹ Hạnh",
+            "Phạm Thị Thu Hiền",
+            "Lê Thị Hoài",
+            "Nguyễn Mạnh Hoàng",
+            "Chu Khắc Khiêm",
+            "Phạm Văn Khoa",
+            "Nguyễn Văn Lâm",
+            "Hoàng Hà Linh",
+            "Vũ Bảo Linh",
+            "Bùi Mai Linh",
+            "Nguyễn Thùy Linh",
+            "Nguyễn Khánh Linh",
+            "Võ Thị Lưu",
+            "Lê Thị Cẩm Ly",
+            "Mai Khánh Ly",
+            "Lê Thị Phương Mai",
+            "Đỗ Tuệ Minh",
+            "Vũ Trà My",
+            "Lại Thị Hà My",
+            "Đồng Thị Thanh Ngân",
+            "Dương Thủy Nguyên",
+            "Bùi Thảo Nguyên",
+            "Lê Thị Phương",
+            "Nguyễn Thị Như Quỳnh",
+            "Đoàn Lê Sơn",
+            "Vũ Thị Kiều Thanh",
+            "Bùi Thị Anh Thơ",
+            "Nguyễn Thanh Thúy",
+            "Phạm Thùy Trang",
+            "Nguyễn Thu Trang",
+            "Lê Phan Hà Trang",
+            "Lê Bảo Trân",
+            "Phùng Hải Yến",
+            "Nguyễn Minh Tuệ",
+            "Dương Thị Hải Yến"
+        ];
+
+        const colors = [
+
+
+            "#6FB5D8",
+            "#5A9AC8",
+            "#487AB0",
+            "#375F90",
+
+        ];
+
+        const center = canvas.width / 2;
+        const radius = canvas.width / 2;
+
+        let currentRotation = 0;
+        let spinning = false;
+
+        const sliceAngle = (Math.PI * 2) / items.length;
+
+
+        /* =========================
+           VẼ VÒNG QUAY
+        ========================= */
+
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            items.forEach((item, index) => {
+
+                const startAngle = index * sliceAngle;
+                const endAngle = startAngle + sliceAngle;
+
+                // Ô màu
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.arc(
+                    center,
+                    center,
+                    radius,
+                    startAngle,
+                    endAngle
+                );
+                ctx.closePath();
+
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.fill();
+
+                // Viền
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+
+                /* =========================
+                   TÊN NGƯỜI
+                ========================= */
+
+                const middleAngle = startAngle + sliceAngle / 2;
+
+                ctx.save();
+
+                ctx.translate(center, center);
+                ctx.rotate(middleAngle);
+
+                ctx.textAlign = "right";
+                ctx.textBaseline = "middle";
+
+                // 41 người nên chữ phải nhỏ
+                let fontSize = 18;
+
+                if (items.length > 35) {
+                    fontSize = 15;
+                }
+
+                if (items.length > 40) {
+                    fontSize = 13;
+                }
+
+                ctx.font = `bold ${fontSize}px Arial`;
+                ctx.fillStyle = "#ffffff";
+
+                // Có bóng chữ để dễ đọc
+                ctx.shadowColor = "#5A9AC8";
+                ctx.shadowBlur = 3;
+
+                ctx.fillText(
+                    item,
+                    radius - 18,
+                    0
+                );
+
+                ctx.restore();
+            });
+
+            // Tâm vòng quay
+            ctx.beginPath();
+            ctx.arc(center, center, 28, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(center, center, 20, 0, Math.PI * 2);
+            ctx.fillStyle = "#d2e3ed";
+            ctx.fill();
+        }
+
+
+        /* =========================
+           QUAY ĐÚNG TÊN ĐƯỢC CHỌN
+        ========================= */
+
+        function spinWheel() {
+
+            if (spinning) return;
+
+            spinning = true;
+            spinBtn.disabled = true;
+            result.textContent = "";
+
+            // Chọn người thắng
+            const winner = Math.floor(Math.random() * items.length);
+
+            // Góc chính giữa ô người thắng
+            const winnerMiddleAngle =
+                winner * sliceAngle + sliceAngle / 2;
+
+            // Mũi tên nằm phía trên
+            const pointerAngle = -Math.PI / 2;
+
+            /*
+                Góc cuối cần đạt để người thắng
+                nằm chính xác dưới mũi tên
+            */
+            const finalAngle =
+                pointerAngle - winnerMiddleAngle;
+
+            /*
+                Chuẩn hóa góc hiện tại
+                để tránh số góc quá lớn sau nhiều lần quay
+            */
+            const normalizedCurrent =
+                currentRotation % (Math.PI * 2);
+
+            /*
+                Khoảng cách từ vị trí hiện tại
+                đến vị trí người thắng
+            */
+            let difference =
+                finalAngle - normalizedCurrent;
+
+            if (difference < 0) {
+                difference += Math.PI * 2;
+            }
+
+            /*
+                Luôn thêm 6 vòng quay
+                => tốc độ các lần quay ổn định
+            */
+            const extraSpins = 6 * Math.PI * 2;
+
+            const startRotation = currentRotation;
+
+            const targetRotation =
+                currentRotation +
+                extraSpins +
+                difference;
+
+            // Luôn mất đúng 3 giây
+            const duration = 3000;
+
+            const startTime = performance.now();
+
+
+            function animate(currentTime) {
+
+                const elapsed =
+                    currentTime - startTime;
+
+                let progress =
+                    elapsed / duration;
+
+                if (progress > 1) {
+                    progress = 1;
+                }
+
+                /*
+                    Ease out:
+                    đầu quay nhanh
+                    cuối chậm lại
+                */
+                const easeOut =
+                    1 - Math.pow(1 - progress, 4);
+
+                currentRotation =
+                    startRotation +
+                    (targetRotation - startRotation) *
+                    easeOut;
+
+
+                /*
+                    Vẽ vòng quay
+                */
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                ctx.save();
+
+                ctx.translate(center, center);
+                ctx.rotate(currentRotation);
+                ctx.translate(-center, -center);
+
+                drawWheel();
+
+                ctx.restore();
+
+
+                if (progress < 1) {
+
+                    requestAnimationFrame(animate);
+
+                } else {
+
+                    // Đảm bảo góc cuối chính xác tuyệt đối
+                    currentRotation = targetRotation;
+
+                    spinning = false;
+                    spinBtn.disabled = false;
+
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+
+        /* =========================
+           KHỞI TẠO
+        ========================= */
+
+        drawWheel();
+
+        spinBtn.addEventListener(
+            "click",
+            spinWheel
+        );
+    </script>
+
+</body>
+
+</html>
